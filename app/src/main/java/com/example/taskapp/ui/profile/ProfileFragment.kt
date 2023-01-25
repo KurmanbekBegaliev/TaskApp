@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import coil.load
 import com.example.taskapp.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment() {
@@ -18,7 +17,7 @@ class ProfileFragment : Fragment() {
 
     private val getContent: ActivityResultLauncher<String> = registerForActivityResult(
         ActivityResultContracts.GetContent()) { imageUri: Uri? ->
-        if (imageUri != null) binding.civProfile.load(imageUri)
+        if (imageUri != null) binding.civProfile.setImageURI(imageUri)
     }
 
     companion object {
@@ -29,7 +28,7 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
