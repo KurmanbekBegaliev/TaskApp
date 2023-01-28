@@ -6,9 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.taskapp.databinding.FragmentProfileBinding
 import com.example.taskapp.utils.Preferences
 
@@ -17,15 +17,16 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
-    private val getContent: ActivityResultLauncher<String> = registerForActivityResult(
-        ActivityResultContracts.GetContent()) { imageUri: Uri? ->
+    private val getContent = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { imageUri: Uri? ->
         if (imageUri != null) {
             binding.civProfile.setImageURI(imageUri)
-            uri = imageUri
+            val preferences = Preferences(requireContext())
+            preferences.setPrefImage(imageUri.toString())
         }
     }
 
-    private var uri: Uri? = null
 
     companion object {
         const val MIMETYPE_IMAGES = "image/*"
@@ -57,14 +58,20 @@ class ProfileFragment : Fragment() {
         val preferences = Preferences(requireContext())
 
         //Если данные из SharedPreferences не null тогда их применим
-        if (preferences.getPrefTitle() != null) binding.edtProfile.setText(
-            preferences.getPrefTitle()
-        )
-        if (preferences.getPrefImage() != "") {
-            binding.civProfile.setImageURI(Uri.parse(preferences.getPrefImage()))
+        if (preferences.getPrefTitle() != "") {
+            binding.edtProfile.setText(
+                preferences.getPrefTitle()
+            )
         }
-
-
+        try {
+            Log.d("ololo", preferences.getPrefImage().toString())
+            if (preferences.getPrefImage() != "") {
+                Glide.with(this).load(preferences.getPrefImage()).into(binding.civProfile)
+            }
+//            binding.civProfile.setImageURI(Uri.parse(preferences.getPrefImage().toString()))
+        } catch (e: java.lang.Exception) {
+            Log.d("ololo", "Exeption ${e.message.toString()}")
+        }
     }
 
     override fun onDestroyView() {
@@ -73,8 +80,6 @@ class ProfileFragment : Fragment() {
         //Сохранение в SharedPreferences
         val preferences = Preferences(requireContext())
         preferences.setPrefTitle(binding.edtProfile.text.toString())
-        preferences.setPrefImage(uri.toString())
-        Log.d("olololo", "onDestroy ${uri.toString()}")
     }
 
     override fun onDestroy() {

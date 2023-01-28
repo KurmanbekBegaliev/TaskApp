@@ -1,6 +1,8 @@
 package com.example.taskapp.ui.home.new_task
 
+import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -30,10 +32,13 @@ class TaskAdapter(private var tasks: MutableList<TaskModel>) :
 
     inner class TaskViewHolder(private val binding: ItemTaskBinding) :
         ViewHolder(binding.root) {
-
         fun bind(task: TaskModel) {
             binding.tvTitle.text = task.title
             binding.tvDesc.text = task.description
+            if (task.uriImage != null) {
+                binding.itemPicture.setImageURI(Uri.parse(task.uriImage))
+                binding.itemPicture.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -42,4 +47,5 @@ class TaskAdapter(private var tasks: MutableList<TaskModel>) :
 data class TaskModel(
     val title: String,
     val description: String,
+    val uriImage: String? = null
 )

@@ -50,11 +50,13 @@ class HomeFragment : Fragment() {
         ) { _ , data ->
             val title = data.getString(NewTaskFragment.NEW_TASK_TITLE_KEY)
             val description = data.getString(NewTaskFragment.NEW_TASK_DESC_KEY)
+            val uriImage = data.getString(NewTaskFragment.NEW_TASK_URI_IMAGE_KEY)
 
             if (title != null) {
-                val taskModel = TaskModel(title, description ?: "")
+                val taskModel = TaskModel(title, description ?: "", uriImage)
                 taskAdapter.add(taskModel)
             }
+
         }
 
 

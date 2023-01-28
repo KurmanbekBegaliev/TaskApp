@@ -6,13 +6,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.home.new_task.NewTaskFragment">
 
+    <ImageView
+        android:id="@+id/iv_picture"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/note_add"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/layout_title"
+        android:contentDescription="@string/todo" />
+
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:padding="16dp"
         android:hint="@string/title"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/iv_picture">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edt_title"
