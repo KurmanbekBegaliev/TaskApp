@@ -2,6 +2,7 @@ package com.example.taskapp.ui.profile
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.example.taskapp.databinding.FragmentProfileBinding
+import com.example.taskapp.utils.Preferences
 
 class ProfileFragment : Fragment() {
 
@@ -17,8 +19,13 @@ class ProfileFragment : Fragment() {
 
     private val getContent: ActivityResultLauncher<String> = registerForActivityResult(
         ActivityResultContracts.GetContent()) { imageUri: Uri? ->
-        if (imageUri != null) binding.civProfile.setImageURI(imageUri)
+        if (imageUri != null) {
+            binding.civProfile.setImageURI(imageUri)
+            uri = imageUri
+        }
     }
+
+    private var uri: Uri? = null
 
     companion object {
         const val MIMETYPE_IMAGES = "image/*"
@@ -47,7 +54,27 @@ class ProfileFragment : Fragment() {
     }
 
     private fun initViews() {
-        //TODO
+        val preferences = Preferences(requireContext())
+
+        //Если данные из SharedPreferences не null тогда их применим
+        if (preferences.getPrefTitle() != null) binding.edtProfile.setText(
+            preferences.getPrefTitle()
+        )
+        if (preferences.getPrefImage() != "") {
+            binding.civProfile.setImageURI(Uri.parse(preferences.getPrefImage()))
+        }
+
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        //Сохранение в SharedPreferences
+        val preferences = Preferences(requireContext())
+        preferences.setPrefTitle(binding.edtProfile.text.toString())
+        preferences.setPrefImage(uri.toString())
+        Log.d("olololo", "onDestroy ${uri.toString()}")
     }
 
     override fun onDestroy() {

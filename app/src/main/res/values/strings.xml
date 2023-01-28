@@ -13,4 +13,7 @@
     <string name="profile">Profile</string>
     <string name="to_do_list">To-do list!</string>
     <string name="here_you_can_write_down_n_something_important_nor_make_a_schedule_for_ntomorrow">Here you can write down\n something important \nor make a schedule for \ntomorrow:)</string>
+    <string name="skip">SKIP</string>
+    <string name="next">NEXT</string>
+    <string name="start">START</string>
 </resources>
