@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.taskapp.R
@@ -13,6 +14,8 @@ import com.example.taskapp.databinding.FragmentHomeBinding
 import com.example.taskapp.ui.home.new_task.NewTaskFragment
 import com.example.taskapp.ui.home.new_task.TaskAdapter
 import com.example.taskapp.ui.home.new_task.TaskModel
+import com.example.taskapp.utils.MainApplication
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
@@ -42,23 +45,21 @@ class HomeFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = taskAdapter
         }
+
+        lifecycleScope.launch{
+            val tasks = MainApplication.appDatabase?.taskDao?.getAll()
+            tasks?.forEach{
+                val taskModel = TaskModel(
+                    title = it.title,
+                    description = it.desc,
+                    pictureUri = it.pictureUri
+                )
+                taskAdapter.add(taskModel)
+            }
+        }
     }
 
     private fun initListeners() {
-        setFragmentResultListener(
-            NewTaskFragment.NEW_TASK_RESULT_KEY,
-        ) { _ , data ->
-            val title = data.getString(NewTaskFragment.NEW_TASK_TITLE_KEY)
-            val description = data.getString(NewTaskFragment.NEW_TASK_DESC_KEY)
-            val uriImage = data.getString(NewTaskFragment.NEW_TASK_URI_IMAGE_KEY)
-
-            if (title != null) {
-                val taskModel = TaskModel(title, description ?: "", uriImage)
-                taskAdapter.add(taskModel)
-            }
-
-        }
-
 
         binding.btnFab.setOnClickListener {
             findNavController().navigate(R.id.newTaskFragment2)
@@ -66,7 +67,8 @@ class HomeFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+        super.onDestroyView()
+
     }
 }

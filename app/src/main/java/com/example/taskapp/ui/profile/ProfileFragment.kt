@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -52,6 +53,13 @@ class ProfileFragment : Fragment() {
         binding.civProfile.setOnClickListener {
             getContent.launch(MIMETYPE_IMAGES)
         }
+
+        binding.btnSaveProfile.setOnClickListener{
+            //Сохранение в SharedPreferences
+            val preferences = Preferences(requireContext())
+            preferences.setPrefTitle(binding.edtProfile.text.toString())
+            Toast.makeText(requireContext(), "saving", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun initViews() {
@@ -74,16 +82,9 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        //Сохранение в SharedPreferences
-        val preferences = Preferences(requireContext())
-        preferences.setPrefTitle(binding.edtProfile.text.toString())
-    }
 
     override fun onDestroy() {
-        super.onDestroy()
         _binding = null
+        super.onDestroy()
     }
 }

@@ -35,8 +35,8 @@ class TaskAdapter(private var tasks: MutableList<TaskModel>) :
         fun bind(task: TaskModel) {
             binding.tvTitle.text = task.title
             binding.tvDesc.text = task.description
-            if (task.uriImage != null) {
-                binding.itemPicture.setImageURI(Uri.parse(task.uriImage))
+            if (task.pictureUri != null) {
+                binding.itemPicture.setImageURI(Uri.parse(task.pictureUri))
                 binding.itemPicture.visibility = View.VISIBLE
             }
         }
@@ -44,8 +44,3 @@ class TaskAdapter(private var tasks: MutableList<TaskModel>) :
 
 }
 
-data class TaskModel(
-    val title: String,
-    val description: String,
-    val uriImage: String? = null
-)

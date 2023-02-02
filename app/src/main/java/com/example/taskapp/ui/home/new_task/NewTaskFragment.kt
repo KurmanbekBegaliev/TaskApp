@@ -13,6 +13,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.example.taskapp.databinding.FragmentNewTaskBinding
 import com.example.taskapp.ui.profile.ProfileFragment
+import com.example.taskapp.utils.MainApplication
 
 class NewTaskFragment : Fragment() {
 
@@ -29,12 +30,6 @@ class NewTaskFragment : Fragment() {
 
     private var uriImage: Uri? = null
 
-    companion object {
-        const val NEW_TASK_RESULT_KEY = "result_key"
-        const val NEW_TASK_TITLE_KEY = "title_key"
-        const val NEW_TASK_DESC_KEY = "desc_key"
-        const val NEW_TASK_URI_IMAGE_KEY = "uri key"
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,17 +52,13 @@ class NewTaskFragment : Fragment() {
         }
 
         binding.btnSave.setOnClickListener {
-            val bundle = bundleOf(
-                NEW_TASK_TITLE_KEY to binding.edtTitle.text.toString(),
-                NEW_TASK_DESC_KEY to binding.edtDescription.text.toString()
+            val entity = TaskEntity(
+                title = binding.edtTitle.text.toString(),
+                desc = binding.edtDescription.text.toString(),
+                pictureUri = uriImage.toString()
             )
-            if (uriImage != null) {
-                bundle.putString(NEW_TASK_URI_IMAGE_KEY, uriImage.toString())
-            }
-            setFragmentResult(
-                NEW_TASK_RESULT_KEY,
-                bundle
-            )
+            MainApplication.appDatabase?.taskDao?.insert(entity)
+
             findNavController().navigateUp()
         }
     }
