@@ -5,13 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.taskapp.R
 import com.example.taskapp.databinding.FragmentHomeBinding
-import com.example.taskapp.ui.home.new_task.NewTaskFragment
 import com.example.taskapp.ui.home.new_task.TaskAdapter
 import com.example.taskapp.ui.home.new_task.TaskModel
 import com.example.taskapp.utils.MainApplication
@@ -60,7 +58,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun initListeners() {
-
         binding.btnFab.setOnClickListener {
             findNavController().navigate(R.id.newTaskFragment2)
         }
